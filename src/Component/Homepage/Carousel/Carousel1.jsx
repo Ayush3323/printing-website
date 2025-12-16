@@ -1,4 +1,7 @@
-import React, { useRef } from 'react';
+import React, { useRef } from 'react'
+import './Carousel.css'
+
+
 
 const items = [
   { title: "Visiting Cards", img: "https://static.zara.net/assets/public/de8a/bcae/217c47019588/d4edf3455490/03166330706-p/03166330706-p.jpg?ts=1761121517281&w=1024" },
@@ -25,41 +28,34 @@ const Carousel = () => {
   };
 
   return (
-    <div className="relative w-full py-8">
-      <h1 className="text-2xl font-bold text-center mb-6">Explore All Categories</h1>
-
+    
+    <div className="carousel-wrapper">
       {/* Left Button */}
-      <button
-        onClick={() => scroll("left")}
-        className="absolute top-1/2 left-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-3xl p-2 rounded-full z-10 hover:bg-opacity-70 transition"
-      >
+      <h1 className='Head' >Explore All Categories</h1>
+      <button className="nav-btn left" onClick={() => scroll("left")}>
         ❮
       </button>
 
-      {/* Carousel */}
-      <div
-        ref={scrollRef}
-        className="flex overflow-x-auto space-x-6 scrollbar-hide scroll-smooth px-4"
-      >
+      {/* Scroll Area */}
+      <div className="carousel" ref={scrollRef}>
         {items.map((item, index) => (
-          <div key={index} className="flex-shrink-0 w-36 text-center">
-            <div className="w-28 h-28 rounded-full overflow-hidden mx-auto mb-2 bg-gray-100 flex items-center justify-center">
-              <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+          <div className="carousel-item" key={index}>
+            <div className="circle">
+              <img src={item.img} alt={item.title} />
             </div>
-            <p className="text-sm font-medium">{item.title}</p>
+            <p>{item.title}</p>
           </div>
         ))}
       </div>
 
       {/* Right Button */}
-      <button
-        onClick={() => scroll("right")}
-        className="absolute top-1/2 right-2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-3xl p-2 rounded-full z-10 hover:bg-opacity-70 transition"
-      >
+      <button className="nav-btn right" onClick={() => scroll("right")}>
         ❯
       </button>
     </div>
   );
 };
+
+
 
 export default Carousel;
