@@ -4,16 +4,22 @@ import './App.css'
 import Navbar from './Component/Navbar/Navbar'
 import Homepage from './Component/Homepage/Homepage'
 import Footer from './Component/Footer/Footer'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Blank from './Component/blank/blank'
 function App() {
 
   return (
     <>
-      <div className='app'>
-        <Navbar />
-        <Homepage />
-        <Footer />
-      </div>
+      <BrowserRouter>
+        <div className='app'>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/blank" element={<Blank />} />
+          </Routes>
+          <Footer />
+        </div>
+      </BrowserRouter>
     </>
   )
 }
