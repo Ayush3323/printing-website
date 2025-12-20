@@ -3,13 +3,17 @@ import './Homepage.css';
 import Hero from './Hero/Hero';
 import Discount from './Discount/Discount';
 import Carousel from './Carousel/Carousel';
-import Hero1 from './Hero1/Hero1';
+import RecentlyViewed from './Carousel/Carousel1';
+import PopularProducts from './Carousel/product';
+import Hero1 from './Hero/Hero1';
 
 function Homepage() {
     return (
         <div>
             <Hero />
             <Carousel />
+            <RecentlyViewed />
+            <PopularProducts />
             <Hero1 />
             <Discount />
         </div>
