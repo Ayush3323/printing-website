@@ -6,6 +6,7 @@ import Homepage from './Component/Homepage/Homepage'
 import Footer from './Component/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Blank from './Component/blank/blank'
+import Product from "./Component/product/product";
 function App() {
 
   return (
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/blank" element={<Blank />} />
+            <Route path="/product" element={<Product />} />
           </Routes>
           <Footer />
         </div>
