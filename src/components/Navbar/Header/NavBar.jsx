@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { fetchMenuData } from "../services/menuApi.js";
 import MegaMenu from "./MegaMenu";
 
@@ -22,16 +22,27 @@ const NavBar = () => {
   return (
     <nav className=" max-w-450  w-full relative">
       <ul className="max-w-450 mx-auto px-6 lg:flex hidden  justify-between items-center gap-6 font-semibold text-[14px]">
+        {/* Static View All Link */}
+        <li className="py-3 cursor-pointer text-center hover:text-cyan-600 transition-colors">
+          <Link to="/view-all">View All</Link>
+        </li>
+
         {menu.map((item) => (
           <li
             key={item.id}
             onMouseEnter={() => setActiveId(item.id)}
             onMouseLeave={() => setActiveId(null)}
-            className={`py-3 cursor-pointer text-center ${
-              activeId === item.id ? "" : ""
-            }`}
+            className={`py-3 cursor-pointer text-center ${activeId === item.id ? "" : ""
+              }`}
           >
-            {item.label}
+            {/* Top Level Category Link */}
+            <Link
+              to={`/categories/${item.id}`} // item.id is the slug from menuApi
+              className="hover:text-cyan-600 transition-colors block"
+              onClick={() => setActiveId(null)} // Close menu on click
+            >
+              {item.label}
+            </Link>
 
             {activeId === item.id && (
               <MegaMenu sections={item.sections} />
