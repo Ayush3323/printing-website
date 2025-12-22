@@ -1,31 +1,43 @@
 import React from 'react';
-
 import Breadcrumb from './Breadcrumb/Breadcrumb';
-import Herosection from './Part/Part';
+import CategoryHero from './Part/Part';
 import Sidebar from './Sidebar/Sidebar';
 import BusinessEssentials from './Business/Business';
 import ImageGallery from './Looks/Looks';
 import MadeByYouPage from './Made/Made';
 import PackagingNeeds from './Packaging/Packaging';
+
 function Categories() {
     return (
-        <div>
+        <div className="bg-gray-50 min-h-screen">
             <Breadcrumb />
-            <Herosection />
+            <CategoryHero />
 
-            {/* Sidebar + Products */}
-            <div className="flex px-1 py-12 bg-white">
-                <Sidebar />
+            <div className="max-w-7xl mx-auto px-4 py-12">
+                <div className="flex flex-col lg:flex-row gap-8">
+                    {/* Sidebar - Fixed width on desktop */}
+                    <aside className="lg:w-1/4">
+                        <Sidebar />
+                    </aside>
 
-                <div className="flex-1">
-                    <BusinessEssentials />
+                    {/* Main Content Area */}
+                    <main className="lg:w-3/4 space-y-12">
+                        <section className="bg-white rounded-2xl shadow-sm p-6">
+                            <BusinessEssentials />
+                        </section>
 
-                    {/* Image Gallery – niche hi rahegi */}
-                    <div className="mt-7 w-full">
-                        <ImageGallery />
-                        <MadeByYouPage />
-                        <PackagingNeeds />
-                    </div>
+                        <section className="bg-white rounded-2xl shadow-sm p-6">
+                            <ImageGallery />
+                        </section>
+
+                        <section className="bg-white rounded-2xl shadow-sm p-6">
+                            <MadeByYouPage />
+                        </section>
+
+                        <section className="bg-white rounded-2xl shadow-sm p-6">
+                            <PackagingNeeds />
+                        </section>
+                    </main>
                 </div>
             </div>
         </div>

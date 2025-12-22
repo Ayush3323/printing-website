@@ -1,45 +1,39 @@
 import React from 'react';
 
 const ImageGrid = () => {
-  // Image data - direct image URLs only
   const imageUrls = [
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Embroidered-Polo-T-Shirt_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Cotton-T-Shirts_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Casual-Shirts_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Formal-Shirts_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Jeans_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Casual-Trousers_Category-image_1x1",
-    "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Shorts_Category-image_1x1"
+    { title: "Embroidered Polo", url: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Embroidered-Polo-T-Shirt_Category-image_1x1" },
+    { title: "Cotton T-Shirt", url: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Cotton-T-Shirts_Category-image_1x1" },
+    { title: "Casual Shirt", url: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Casual-Shirts_Category-image_1x1" },
+    { title: "Formal Shirt", url: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_450/India%20LOB/Category%20Images/Men_s-Formal-Shirts_Category-image_1x1" },
   ];
 
   return (
-    <div className="min-h-screen bg-white p-1">
-      <div className="max-w-7xl mx-auto">
-        
-        {/* Heading Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">
-            Love your new look
-          </h1>
-          <p className="text-gray-600 text-lg">
-            Explore our exclusive collection
-          </p>
-        </div>
+    <div className="bg-white">
+      <div className="text-center mb-10">
+        <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">
+          Love your new look
+        </h2>
+        <p className="mt-2 text-gray-500">Explore our exclusive custom clothing collection</p>
+      </div>
 
-        {/* 4-Column Image Grid - Images Only */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {imageUrls.map((url, index) => (
-            <div key={index} className="relative group">
-              <img
-                src={url}
-                alt={`Fashion item ${index + 1}`}
-                className="w-full h-80 object-cover rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] cursor-pointer"
-                loading="lazy"
-              />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {imageUrls.map((item, index) => (
+          <div key={index} className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all duration-500">
+            <img
+              src={item.url}
+              alt={item.title}
+              className="w-full aspect-[3/4] object-cover group-hover:scale-110 transition-transform duration-700"
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = `https://via.placeholder.com/400x600/f3f4f6/9ca3af?text=${encodeURIComponent(item.title)}`;
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+              <span className="text-white font-bold text-lg">{item.title}</span>
             </div>
-          ))}
-        </div>
-
+          </div>
+        ))}
       </div>
     </div>
   );
