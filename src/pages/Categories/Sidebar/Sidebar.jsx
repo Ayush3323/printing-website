@@ -8,7 +8,7 @@ const Sidebar = () => {
         'Standard Visiting Cards',
         'Classic Visiting Cards',
         'Rounded Corner Visiting Cards',
-       
+
       ]
     },
     {
@@ -48,7 +48,7 @@ const Sidebar = () => {
         'Labels, Stickers & Packaging'
       ]
     },
-   
+
     {
       name: 'Home & Gifts',
       items: [
@@ -65,8 +65,8 @@ const Sidebar = () => {
     <div className="bg-gray-50 min-h-screen p-24.5 font-sans">
       <div className="max-w-4xl mx-auto">
         <div className="bg-white rounded-lg  p-8">
-         
-          
+
+
           <div className="space-y-8">
             {categories.map((category, index) => (
               <div key={category.name} className="mb-6">
@@ -76,7 +76,7 @@ const Sidebar = () => {
                     {category.name}
                   </h3>
                 </div>
-                
+
                 {/* Sub-items */}
                 {category.items && (
                   <div className="ml-4 space-y-2">
@@ -91,7 +91,7 @@ const Sidebar = () => {
                     ))}
                   </div>
                 )}
-                
+
                 {/* For categories without items */}
                 {!category.items && (
                   <div className="ml-4 px-4 py-3 text-gray-500 italic">

@@ -18,13 +18,13 @@ const Hero = () => {
             <h2 className="text-2xl font-bold text-black mb-1">
               Calendars, Notebooks and Diaries
             </h2>
-            
+
             {/* 子标题 */}
             <div className="flex items-center gap-1 text-sm text-gray-600 mb-4">
               <span className="font-medium">Starting at</span>
               <span className="font-bold">₹ 160.00</span>
             </div>
-            
+
             {/* 按钮组 */}
             <div className="flex gap-3 flex-wrap">
               <button className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition">
@@ -37,7 +37,7 @@ const Hero = () => {
                 Diaries
               </button>
             </div>
-            
+
             {/* 底部横幅文字 */}
             <div className="mt-4 pt-4 border-t border-gray-100 text-xs text-gray-500">
               <span>Calendars, Notebooks and Diaries</span>
@@ -62,13 +62,13 @@ const Hero = () => {
             <h2 className="text-2xl font-bold text-black mb-1">
               Custom Winter Wear
             </h2>
-            
+
             {/* 子标题 */}
             <div className="flex items-center gap-1 text-sm text-gray-600 mb-4">
               <span className="font-medium">Starting at</span>
               <span className="font-bold">Rs.850</span>
             </div>
-            
+
             {/* 主按钮 */}
             <button className="w-full bg-black text-white px-6 py-3 rounded-md text-sm hover:bg-gray-800 transition font-medium">
               Shop Now

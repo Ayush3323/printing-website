@@ -1,13 +1,12 @@
 import { useState } from 'react'
 import React from 'react'
 import './App.css'
-import Navbar from './Component/Navbar/Navbar'
-import Homepage from './Component/Homepage/Homepage'
-import Categories from './Component/Categories/Categories'
-import Footer from './Component/Footer/Footer'
+import Navbar from './components/Navbar/Navbar'
+import Homepage from './pages/Homepage/Homepage'
+import Categories from './pages/Categories/Categories'
+import Footer from './components/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import Blank from './Component/blank/blank'
-import Product from "./Component/product/product";
+import Product from "./components/Product/Product";
 function App() {
 
   return (
@@ -18,7 +17,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/Categories" element={<Categories />} />
-            <Route path="/blank" element={<Blank />} />
             <Route path="/product" element={<Product />} />
           </Routes>
           <Footer />
