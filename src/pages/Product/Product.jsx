@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import catalogService from "../../services/catalogService";
+import { useShop } from "../../context/ShopContext";
 
 export default function Product() {
   const { slug, productSlug } = useParams();
   const activeSlug = productSlug || slug;
 
+  const { addToCart } = useShop();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeImage, setActiveImage] = useState("");
@@ -53,6 +56,11 @@ export default function Product() {
       </div>
     );
   }
+
+  const handleAddToCart = () => {
+    addToCart(product, 1);
+    navigate('/cart');
+  };
 
   if (!product) {
     return <div className="min-h-screen flex items-center justify-center">Product not found.</div>;
@@ -153,11 +161,26 @@ export default function Product() {
             )}
 
             <div className="flex flex-col sm:flex-row gap-4">
-              <button className="flex-1 bg-black text-white text-lg font-bold py-4 px-8 rounded-full hover:bg-gray-800 transition-transform active:scale-95 shadow-lg">
-                Start Designing
-              </button>
-              <button className="bg-white text-black border-2 border-gray-200 text-lg font-bold py-4 px-8 rounded-full hover:border-black transition-colors">
-                Upload Design
+              {product.zakeke_product_id ? (
+                <Link
+                  to={`/zakeke-editor/${product.slug}`}
+                  className="flex-1 bg-black text-white text-lg font-bold py-4 px-8 rounded-full hover:bg-gray-800 transition-transform active:scale-95 shadow-lg text-center"
+                >
+                  Personalize with 3D
+                </Link>
+              ) : (
+                <Link
+                  to={`/product/${product.slug}/templates`}
+                  className="flex-1 bg-black text-white text-lg font-bold py-4 px-8 rounded-full hover:bg-gray-800 transition-transform active:scale-95 shadow-lg text-center"
+                >
+                  Browse Design
+                </Link>
+              )}
+              <button
+                onClick={handleAddToCart}
+                className="bg-white text-black border-2 border-gray-200 text-lg font-bold py-4 px-8 rounded-full hover:border-black transition-colors"
+              >
+                Add to Cart
               </button>
             </div>
 
@@ -175,28 +198,35 @@ export default function Product() {
           {/* Product Specs */}
           <div>
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Specifications</h2>
-            {product.print_specs ? (
-              <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Dimensions</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{product.print_specs.width_mm}mm x {product.print_specs.height_mm}mm</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Safe Zone</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{product.print_specs.safe_zone_mm}mm</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Bleed</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{product.print_specs.bleed_margin_mm}mm</dd>
-                </div>
-                <div className="sm:col-span-1">
-                  <dt className="text-sm font-medium text-gray-500">Formats</dt>
-                  <dd className="mt-1 text-sm text-gray-900">{product.print_specs.allowed_file_types}</dd>
-                </div>
-              </dl>
+            {product.print_specs && product.print_specs.length > 0 ? (
+              <div className="space-y-6">
+                {product.print_specs.map((spec, sIdx) => (
+                  <div key={sIdx} className="bg-white p-4 rounded-lg border border-gray-100 shadow-sm">
+                    <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wider">{spec.surface} Print Area</h3>
+                    <dl className="grid grid-cols-2 gap-x-4 gap-y-4">
+                      <div>
+                        <dt className="text-xs font-medium text-gray-500 uppercase">Dimensions</dt>
+                        <dd className="mt-1 text-sm text-gray-900 font-semibold">{spec.width_mm}mm x {spec.height_mm}mm</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-medium text-gray-500 uppercase">Safe Zone</dt>
+                        <dd className="mt-1 text-sm text-gray-900 font-semibold">{spec.safe_zone_mm}mm</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-medium text-gray-500 uppercase">Bleed</dt>
+                        <dd className="mt-1 text-sm text-gray-900 font-semibold">{spec.bleed_margin_mm}mm</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs font-medium text-gray-500 uppercase">DPI (Min)</dt>
+                        <dd className="mt-1 text-sm text-gray-900 font-semibold">{spec.min_resolution_dpi || 300}</dd>
+                      </div>
+                    </dl>
+                  </div>
+                ))}
+              </div>
             ) : (
               <div className="p-6 bg-white rounded-xl border border-dashed border-gray-300 text-center">
-                <p className="text-gray-500">Backend: Add 'PrintSpecs' to this product to see technical details here.</p>
+                <p className="text-gray-500 text-sm">Technical specifications are being updated for this product.</p>
               </div>
             )}
           </div>

@@ -7,6 +7,13 @@ import Categories from './pages/Categories/Categories'
 import Footer from './components/Footer/Footer'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Product from "./pages/Product/Product";
+import TemplateSelection from "./pages/TemplateSelection/TemplateSelection";
+import Editor from "./pages/Editor/Editor";
+import ZakekeEditor from './pages/Editor/ZakekeEditor';
+import Cart from './pages/Cart/Cart';
+// import AdminLayout from './components/AdminLayout';
+
+
 function App() {
 
   return (
@@ -27,6 +34,10 @@ function App() {
             <Route path="/categories/:category" element={<Categories />} />
             <Route path="/categories/:category/:productSlug" element={<Product />} />
             <Route path="/product/:slug" element={<Product />} />
+            <Route path="/product/:slug/templates" element={<TemplateSelection />} />
+            <Route path="/editor/:templateId" element={<Editor />} />
+            <Route path="/zakeke-editor/:productId" element={<ZakekeEditor />} />
+            <Route path="/cart" element={<Cart />} />
           </Routes>
           <Footer />
         </div>

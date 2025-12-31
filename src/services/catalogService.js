@@ -82,6 +82,17 @@ const catalogService = {
             console.error('Error fetching product:', error);
             throw error;
         }
+    },
+
+    // Templates
+    getTemplates: async (params = {}) => {
+        try {
+            const response = await apiHook.get('/templates/', { params });
+            return response.data.results || response.data;
+        } catch (error) {
+            console.error('Error fetching templates:', error);
+            throw error;
+        }
     }
 };
 
@@ -121,7 +132,10 @@ const transformProduct = (product) => {
         rating: {
             value: product.average_rating || 0,
             count: product.review_count || 0
-        }
+        },
+        basePrice: Number(product.base_price || 0),
+        finalPrice: Number(product.final_price || 0),
+        zakeke_product_id: product.zakeke_product_id
     };
 };
 
