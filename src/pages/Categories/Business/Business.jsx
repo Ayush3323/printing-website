@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const BusinessEssentials = ({ title = "Business Essentials", products = [] }) => {
   if (!products || products.length === 0) return null;
@@ -16,9 +17,10 @@ const BusinessEssentials = ({ title = "Business Essentials", products = [] }) =>
       {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {products.map((product) => (
-          <div
+          <Link
             key={product.id}
-            className="group cursor-pointer"
+            to={product.href || `/product/${product.slug}`}
+            className="group cursor-pointer block"
           >
             {/* Image with Hover Effect */}
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 mb-4 shadow-sm group-hover:shadow-md transition-all duration-300">
@@ -40,7 +42,7 @@ const BusinessEssentials = ({ title = "Business Essentials", products = [] }) =>
                 {product.price}
               </p>
             )}
-          </div>
+          </Link>
         ))}
       </div>
     </div>

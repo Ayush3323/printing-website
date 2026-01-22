@@ -5,9 +5,9 @@ export const heroData = [
         subtitle: "Starting at ₹ 160.00",
         image: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_1920/India%20LOB/NVHP/New%20Home%20Page/Big%20Marquee/IN_Calendar_-Notebooks-and-Diaries_SunlightCoffee_Marquee_01_1",
         buttons: [
-            { label: "Calendars", link: "#" },
-            { label: "Notebooks", link: "#" },
-            { label: "Diaries", link: "#" }
+            { label: "Calendars", link: "/search?q=calendars" },
+            { label: "Notebooks", link: "/search?q=notebooks" },
+            { label: "Diaries", link: "/search?q=diaries" }
         ],
         footer: "Calendars, Notebooks and Diaries > Bottom Banner > 2026"
     },
@@ -17,7 +17,7 @@ export const heroData = [
         subtitle: "Starting at Rs.850",
         image: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_1920/India%20LOB/NVHP/New%20Home%20Page/Big%20Marquee/IN_Winterwear_Marquee_01_4",
         buttons: [
-            { label: "Shop Now", link: "#", primary: true }
+            { label: "Shop Now", link: "/search?q=winter+wear", primary: true }
         ]
     }
 ];
@@ -29,8 +29,8 @@ export const heroDataSecondary = [
         subtitle: "Starting at ₹550.00",
         image: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_960/India%20LOB/NVHP/New%20Home%20Page/Production/3rd%20Feb%202025/IN_Polo_PrintedT-Shirts_Marquee_01_1",
         buttons: [
-            { label: "Custom Polo Tshirt", link: "#" },
-            { label: "Custom Tshirt", link: "#" }
+            { label: "Custom Polo Tshirt", link: "/search?q=polo+tshirt" },
+            { label: "Custom Tshirt", link: "/search?q=custom+tshirt" }
         ]
     },
     {
@@ -39,7 +39,7 @@ export const heroDataSecondary = [
         subtitle: "100 visiting card at RS 100",
         image: "https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,w_960/India%20LOB/NVHP/New%20Home%20Page/Testing/Static%20Page/IN_Visiting-card_GK-Fashions_Marquee_01_1",
         buttons: [
-            { label: "Shop Now", link: "#", primary: true }
+            { label: "Shop Now", link: "/search?q=visiting+cards", primary: true }
         ]
     }
 ];

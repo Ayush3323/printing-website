@@ -13,7 +13,7 @@ export default function SignInDropdown() {
       </p>
 
       <Link
-        to="/signin"
+        to="/login"
         className="block text-center bg-cyan-400 text-white font-medium py-2 rounded-lg mb-4 hover:bg-cyan-500"
       >
         Sign in

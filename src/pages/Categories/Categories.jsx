@@ -23,9 +23,22 @@ function Categories() {
 
                 const catsData = await catalogService.getCategories();
 
-                // If specific category selected, fetch its products. Otherwise fetch all (or top) products.
-                const productParams = categorySlug ? { category: categorySlug } : {};
-                const prodsData = await catalogService.getProducts(productParams);
+                // If specific category selected, fetch its products
+                let prodsData = [];
+                if (categorySlug) {
+                    // Find the category by slug to verify it exists
+                    const selectedCategory = catsData.find(c => c.slug === categorySlug);
+                    if (selectedCategory) {
+                        // Backend expects category SLUG in the query param, not ID
+                        prodsData = await catalogService.getProducts({ category: categorySlug });
+                        console.log(`Fetched ${prodsData.length} products for category: ${categorySlug}`);
+                    } else {
+                        console.warn(`Category not found for slug: ${categorySlug}`);
+                    }
+                } else {
+                    // View All: fetch all products
+                    prodsData = await catalogService.getProducts();
+                }
 
                 setCategories(catsData);
                 setProducts(prodsData);
@@ -133,20 +146,34 @@ function Categories() {
                     <main className="lg:w-3/4 space-y-12">
                         {activeCategory ? (
                             // Render actual subcategory sections
-                            (activeCategory.subcategories || []).map(sub => {
-                                // Filter products for this subcategory.
-                                // NOTE: This requires `catalogService` to make sure products have `subcategory_name` or `subcategory` ID exposed.
-                                // I will assume we update catalogService momentarily.
-                                const subProducts = products.filter(p => p.subcategory_name === sub.name || p.subcategory === sub.id); // Try to match by name or ID
+                            (activeCategory.subcategories || []).length > 0 ? (
+                                (activeCategory.subcategories || []).map(sub => {
+                                    // Filter products for this subcategory
+                                    const subProducts = products.filter(p => {
+                                        // Match by subcategory ID or name
+                                        return p.subcategory === sub.id || p.subcategory_name === sub.name;
+                                    });
 
-                                if (subProducts.length === 0) return null;
+                                    if (subProducts.length === 0) return null;
 
-                                return (
-                                    <section key={sub.id} className="bg-white rounded-2xl shadow-sm p-6">
-                                        <BusinessEssentials title={sub.name} products={subProducts} />
+                                    return (
+                                        <section key={sub.id} className="bg-white rounded-2xl shadow-sm p-6">
+                                            <BusinessEssentials title={sub.name} products={subProducts} />
+                                        </section>
+                                    );
+                                })
+                            ) : (
+                                // If category has no subcategories, show all products
+                                products.length > 0 ? (
+                                    <section className="bg-white rounded-2xl shadow-sm p-6">
+                                        <BusinessEssentials title={activeCategory.name} products={products} />
                                     </section>
-                                );
-                            })
+                                ) : (
+                                    <div className="text-center py-12">
+                                        <p className="text-gray-500">No products found in this category.</p>
+                                    </div>
+                                )
+                            )
                         ) : (
                             // Generic View All sections
                             contentSections.map((section, idx) => (
@@ -158,6 +185,7 @@ function Categories() {
                             ))
                         )}
 
+                        {/* Show message if no products at all */}
                         {products.length === 0 && (
                             <div className="text-center py-12">
                                 <p className="text-gray-500">No products found in this category.</p>

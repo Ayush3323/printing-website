@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const apiHook = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1',
+    baseURL: import.meta.env.VITE_API_URL,
+    // baseURL: 'http://127.0.0.1:8000/api/v1',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -12,10 +13,17 @@ const apiHook = axios.create({
 // Request interceptor
 apiHook.interceptors.request.use(
     (config) => {
-        // You can add auth tokens here in the future
-        const token = localStorage.getItem('token');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        // Use Basic Auth credentials if available
+        const credentials = localStorage.getItem('authCredentials');
+        if (credentials) {
+            config.headers.Authorization = `Basic ${credentials}`;
+            config.withCredentials = true; // For session cookies
+        } else {
+            // Fallback to Bearer token if available
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
         }
         return config;
     },
@@ -35,7 +43,11 @@ apiHook.interceptors.response.use(
             console.error('API Error:', error.response.data);
             if (error.response.status === 401) {
                 // Handle unauthorized access
-                // window.location.href = '/login';
+                localStorage.removeItem('authCredentials');
+                localStorage.removeItem('username');
+                if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+                    window.location.href = '/login';
+                }
             }
         } else if (error.request) {
             // The request was made but no response was received

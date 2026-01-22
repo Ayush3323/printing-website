@@ -15,12 +15,11 @@ export default function SearchDropdown() {
 
       <ul className="space-y-2">
         {searches.map((item) => (
-         <Link to={`/${item}`}><li
-            key={item}
-            className="cursor-pointer hover:text-blue-600"
-          >
-            {item}
-          </li></Link>
+          <Link key={item} to={`/search?q=${encodeURIComponent(item)}`}>
+            <li className="cursor-pointer hover:text-blue-600">
+              {item}
+            </li>
+          </Link>
         ))}
       </ul>
     </div>

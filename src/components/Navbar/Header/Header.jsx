@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import SearchDropdown from "./SearchDropdown";
 import SignInDropdown from "./SignInDropdown";
 import NavBar from "./NavBar";
+import userService from "../../../services/userService";
 import { BsFolder2 } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineShoppingBag } from "react-icons/md";
@@ -14,8 +15,14 @@ export default function Header() {
 
   const [showSearch, setShowSearch] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const searchRef = useRef(null);
+
+  // Check authentication status
+  useEffect(() => {
+    setIsAuthenticated(userService.isAuthenticated());
+  }, [location.pathname]); // Re-check on route change
 
   // Close dropdowns on route change
   useEffect(() => {
@@ -50,17 +57,35 @@ export default function Header() {
         {/* Search */}
         <div className="hidden md:flex flex-1 mx-8">
           <div ref={searchRef} className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search"
-              onFocus={() => setShowSearch(true)}
-              className="w-full border rounded-lg py-2 pl-4 pr-10 focus:outline-none"
-            />
-            <svg className="w-5 h-5 cursor-pointer absolute right-4 top-1/2 -translate-y-1/2 text-gray-500"
-              fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-            </svg>
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const query = formData.get('search')?.trim();
+                if (query) {
+                  window.location.href = `/search?q=${encodeURIComponent(query)}`;
+                }
+              }}
+              className="w-full"
+            >
+              <input
+                type="text"
+                name="search"
+                placeholder="Search"
+                onFocus={() => setShowSearch(true)}
+                className="w-full border rounded-lg py-2 pl-4 pr-10 focus:outline-none"
+              />
+              <button 
+                type="submit"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+              >
+                <svg className="w-5 h-5 cursor-pointer"
+                  fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round"
+                    d="M21 21l-4.35-4.35m1.85-5.65a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                </svg>
+              </button>
+            </form>
             {showSearch && <SearchDropdown />}
           </div>
         </div>
@@ -77,7 +102,7 @@ export default function Header() {
           </div>
           </Link>
 
-          <Link to="/projects">
+          <Link to="/account/designs">
             <div className="flex flex-row items-center pb-1 border-b-2 border-transparent hover:border-gray-400 gap-1"><BsFolder2 className="text-lg" />
               <span className="">My Projects</span>
             </div></Link>
@@ -89,23 +114,29 @@ export default function Header() {
           </Link>
 
 
-          {/* Sign In with Hover Dropdown */}
-          <div
-            onMouseEnter={() => setShowSignIn(true)}
-            onMouseLeave={() => setShowSignIn(false)}
-            className="relative"
-          >
-            <Link
-              to="/signin"
-            >
+          {/* Sign In / Account */}
+          {isAuthenticated ? (
+            <Link to="/account">
               <div className="pb-1 border-b-2 border-transparent hover:border-gray-400 flex items-center gap-1">
                 <LuUserRound className="text-lg" />
-                <span>Sign in</span>
+                <span>Account</span>
               </div>
             </Link>
-
-            {showSignIn && <SignInDropdown />}
-          </div>
+          ) : (
+            <div
+              onMouseEnter={() => setShowSignIn(true)}
+              onMouseLeave={() => setShowSignIn(false)}
+              className="relative"
+            >
+              <Link to="/login">
+                <div className="pb-1 border-b-2 border-transparent hover:border-gray-400 flex items-center gap-1">
+                  <LuUserRound className="text-lg" />
+                  <span>Sign in</span>
+                </div>
+              </Link>
+              {showSignIn && <SignInDropdown />}
+            </div>
+          )}
 
           <Link to="/cart">
             <div className="flex flex-row items-center pb-1 border-b-2 border-transparent hover:border-gray-400 gap-1"><MdOutlineShoppingBag className="text-lg" />

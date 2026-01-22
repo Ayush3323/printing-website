@@ -74,7 +74,13 @@ export default function Product() {
         <nav className="text-sm text-gray-500 mb-6">
           <Link to="/" className="hover:underline">Home</Link>
           {" > "}
-          <Link to={`/categories/${product.subcategory_name}`} className="hover:underline">{product.subcategory_name || 'Category'}</Link>
+          <Link to="/view-all" className="hover:underline">Categories</Link>
+          {product.subcategory_name && (
+            <>
+              {" > "}
+              <span className="text-gray-900 font-medium">{product.subcategory_name}</span>
+            </>
+          )}
           {" > "}
           <span className="text-gray-900 font-medium">{product.title}</span>
         </nav>

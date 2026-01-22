@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = ({ categories = [], showProducts = false }) => {
   // If showing products (specific category view), we assume 'categories' has only 1 item (the active category)
@@ -30,12 +31,12 @@ const Sidebar = ({ categories = [], showProducts = false }) => {
                             The sidebar iterates `categories` -> `subcategories` -> `products`.
                             We can access `category.slug` from the outer loop! 
                         */}
-                        <a
-                          href={`/categories/${category.slug}/${product.slug}`}
+                        <Link
+                          to={`/product/${product.slug}`}
                           className="block px-3 py-1.5 text-sm text-gray-600 hover:text-black hover:bg-gray-50 rounded-lg transition-all duration-200"
                         >
                           {product.name}
-                        </a>
+                        </Link>
                       </li>
                     ))}
                     {(sub.products || []).length === 0 && (
@@ -58,19 +59,19 @@ const Sidebar = ({ categories = [], showProducts = false }) => {
         {categories.map((category) => (
           <div key={category.id} className="group">
             <h3 className="text-lg font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-100 group-hover:border-black transition-colors duration-300">
-              <a href={`/categories/${category.slug}`}>{category.name}</a>
+              <Link to={`/categories/${category.slug}`}>{category.name}</Link>
             </h3>
 
             {category.subcategories && category.subcategories.length > 0 && (
               <ul className="space-y-1">
                 {category.subcategories.map((sub, idx) => (
                   <li key={idx}>
-                    <a
-                      href={`/categories/${category.slug}?subcategory=${sub.slug}`}
+                    <Link
+                      to={`/categories/${category.slug}?subcategory=${sub.slug}`}
                       className="block px-3 py-2 text-sm text-gray-600 hover:text-black hover:bg-gray-50 rounded-lg transition-all duration-200"
                     >
                       {sub.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>

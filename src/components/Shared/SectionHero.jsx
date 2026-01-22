@@ -1,6 +1,21 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SectionHero = ({ data, className = "" }) => {
+    const navigate = useNavigate();
+
+    const handleButtonClick = (link) => {
+        if (!link || link === '#') return;
+        
+        // If it's an external link, open in new tab
+        if (link.startsWith('http')) {
+            window.open(link, '_blank', 'noopener,noreferrer');
+        } else {
+            // Internal route
+            navigate(link);
+        }
+    };
+
     return (
         <section className={`w-full py-10 bg-white overflow-hidden ${className}`}>
             <div className="w-full">
@@ -23,17 +38,37 @@ const SectionHero = ({ data, className = "" }) => {
                                 )}
 
                                 <div className="mt-4 flex gap-3 flex-wrap">
-                                    {item.buttons?.map((btn, idx) => (
-                                        <button
-                                            key={idx}
-                                            className={`${btn.primary
-                                                    ? "bg-black text-white hover:bg-gray-800"
-                                                    : "bg-white text-black border border-black hover:bg-gray-50"
-                                                } px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95`}
-                                        >
-                                            {btn.label}
-                                        </button>
-                                    ))}
+                                    {item.buttons?.map((btn, idx) => {
+                                        // If link is internal and not '#', use Link
+                                        if (btn.link && btn.link !== '#' && !btn.link.startsWith('http')) {
+                                            return (
+                                                <Link
+                                                    key={idx}
+                                                    to={btn.link}
+                                                    className={`${btn.primary
+                                                        ? "bg-black text-white hover:bg-gray-800"
+                                                        : "bg-white text-black border border-black hover:bg-gray-50"
+                                                        } px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95 inline-block text-center`}
+                                                >
+                                                    {btn.label}
+                                                </Link>
+                                            );
+                                        }
+                                        
+                                        // For external links or no link, use button
+                                        return (
+                                            <button
+                                                key={idx}
+                                                onClick={() => handleButtonClick(btn.link)}
+                                                className={`${btn.primary
+                                                        ? "bg-black text-white hover:bg-gray-800"
+                                                        : "bg-white text-black border border-black hover:bg-gray-50"
+                                                    } px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 active:scale-95`}
+                                            >
+                                                {btn.label}
+                                            </button>
+                                        );
+                                    })}
                                 </div>
 
                                 {item.footer && (

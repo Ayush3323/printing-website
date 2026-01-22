@@ -22,11 +22,11 @@ const CartItem = ({ item, onRemove }) => {
         }
     }, [item.designId]);
 
-    // Calculate prices based on Zakeke's formula
-    const unitPrice = Number(item.base_price || 0);
+    // Calculate prices - use finalPrice if available, otherwise basePrice
+    const basePrice = item.finalPrice || item.basePrice || item.base_price || 0;
     const markupPrice = designDetails?.designUnitPrice || 0;
-    const finalUnitPrice = unitPrice + markupPrice;
-    const totalPrice = finalUnitPrice * item.quantity;
+    const finalUnitPrice = Number(basePrice) + Number(markupPrice);
+    const totalPrice = finalUnitPrice * (item.quantity || 1);
 
     return (
         <div className="cart-item">
@@ -35,19 +35,19 @@ const CartItem = ({ item, onRemove }) => {
                     <div className="image-placeholder animate-pulse"></div>
                 ) : (
                     <img
-                        src={designDetails?.tempPreviewImageUrl || item.primary_image || 'https://placehold.co/100x100'}
-                        alt={item.title}
+                        src={designDetails?.tempPreviewImageUrl || item.image || item.img || item.primary_image || 'https://placehold.co/100x100'}
+                        alt={item.title || 'Product'}
                     />
                 )}
             </div>
             <div className="cart-item-details">
-                <h3>{item.title}</h3>
+                <h3>{item.title || item.name || 'Product'}</h3>
                 {item.designId && (
                     <div className="design-badge">Customized Design</div>
                 )}
                 <div className="price-breakdown">
-                    <p>Unit Price: ₹{unitPrice}</p>
-                    {markupPrice > 0 && <p className="markup">+ Customization: ₹{markupPrice}</p>}
+                    <p>Unit Price: ₹{Number(basePrice).toFixed(2)}</p>
+                    {markupPrice > 0 && <p className="markup">+ Customization: ₹{Number(markupPrice).toFixed(2)}</p>}
                 </div>
                 <div className="cart-item-actions">
                     <button onClick={() => onRemove(item.cartId)} className="remove-btn">Remove</button>
@@ -59,10 +59,10 @@ const CartItem = ({ item, onRemove }) => {
                 </div>
             </div>
             <div className="cart-item-quantity">
-                Qty: {item.quantity}
+                Qty: {item.quantity || 1}
             </div>
             <div className="cart-item-total">
-                ₹{totalPrice.toFixed(2)}
+                ₹{isNaN(totalPrice) ? '0.00' : totalPrice.toFixed(2)}
             </div>
         </div>
     );
@@ -71,34 +71,16 @@ const CartItem = ({ item, onRemove }) => {
 const Cart = () => {
     const { cartItems, removeFromCart, clearCart } = useShop();
 
-    const handleCheckout = async () => {
-        try {
-            const orderData = {
-                orderCode: `ORDER-${Date.now()}`,
-                orderDate: new Date().toISOString(),
-                sessionID: 'frontend-session-123',
-                total: cartItems.reduce((acc, item) => acc + (Number(item.base_price) * item.quantity), 0),
-                details: cartItems.map(item => ({
-                    sku: item.id.toString(),
-                    designID: item.designId || '',
-                    quantity: item.quantity,
-                    modelUnitPrice: Number(item.base_price)
-                }))
-            };
-
-            await zakekeService.registerOrder(orderData);
-            alert('Order registered in Zakeke! Print-ready files are being generated.');
-            clearCart();
-        } catch (err) {
-            console.error('Checkout failed', err);
-            alert('Checkout failed: ' + err.message);
-        }
+    const handleCheckout = () => {
+        // Redirect to checkout flow using navigate
+        window.location.href = '/checkout/address';
     };
 
     const subtotal = cartItems.reduce((acc, item) => {
-        // We'd ideally want to wait for all design details to calculate real subtotal,
-        // but for now we'll sum base prices or use a derived total if we had it.
-        return acc + (Number(item.base_price) * item.quantity);
+        // Calculate subtotal using finalPrice or basePrice
+        const basePrice = item.finalPrice || item.basePrice || item.base_price || 0;
+        const quantity = item.quantity || 1;
+        return acc + (Number(basePrice) * quantity);
     }, 0);
 
     if (cartItems.length === 0) {
@@ -123,8 +105,8 @@ const Cart = () => {
                     <div className="cart-summary">
                         <h3>Order Summary</h3>
                         <div className="summary-row">
-                            <span>Subtotal (Base)</span>
-                            <span>₹{subtotal.toFixed(2)}</span>
+                            <span>Subtotal</span>
+                            <span>₹{isNaN(subtotal) ? '0.00' : subtotal.toFixed(2)}</span>
                         </div>
                         <div className="summary-row shipping">
                             <span>Shipping</span>
@@ -132,8 +114,8 @@ const Cart = () => {
                         </div>
                         <hr />
                         <div className="summary-row total">
-                            <span>Estimted Total</span>
-                            <span>₹{subtotal.toFixed(2)}</span>
+                            <span>Estimated Total</span>
+                            <span>₹{isNaN(subtotal) ? '0.00' : subtotal.toFixed(2)}</span>
                         </div>
                         <button className="checkout-btn" onClick={handleCheckout}>
                             Checkout

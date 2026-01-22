@@ -3,6 +3,8 @@ import './Homepage.css';
 import SectionHero from '../../components/Shared/SectionHero';
 import ProductCarousel from '../../components/Shared/ProductCarousel';
 import Discount from './Discount/Discount';
+import ScrollReveal from '../../components/ScrollReveal';
+import LottieAnimation from '../../components/LottieAnimation';
 import {
     heroData,
     heroDataSecondary
@@ -33,12 +35,44 @@ function Homepage() {
 
                 // Fetch Featured Products (using as Popular)
                 const productsData = await catalogService.getProducts({ featured: true });
-                setPopularProducts(productsData);
+                setPopularProducts(productsData.slice(0, 12)); // Limit to 12 items
 
-                // For Recently Viewed, we'll just show some random or latest products for now
-                // In a real app, this would be from local storage or user history
-                const recentData = await catalogService.getProducts();
-                setFeaturedProducts(recentData.slice(0, 8)); // Just take first 8
+                // For Recently Viewed, check localStorage first, then fallback to latest products
+                try {
+                    const recentlyViewedIds = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+                    const allProducts = await catalogService.getProducts();
+                    let recentProducts = [];
+                    
+                    if (recentlyViewedIds.length > 0) {
+                        // Filter products by recently viewed IDs (preserve order from localStorage)
+                        const recentlyViewedMap = new Map();
+                        allProducts.forEach(p => {
+                            if (recentlyViewedIds.includes(p.id)) {
+                                recentlyViewedMap.set(p.id, p);
+                            }
+                        });
+                        // Sort by the order in recentlyViewedIds
+                        recentProducts = recentlyViewedIds
+                            .map(id => recentlyViewedMap.get(id))
+                            .filter(p => p !== undefined)
+                            .slice(0, 8);
+                    }
+                    
+                    // If we don't have enough recently viewed, fill with latest products
+                    if (recentProducts.length < 8) {
+                        const existingIds = new Set(recentProducts.map(p => p.id));
+                        const additionalProducts = allProducts
+                            .filter(p => !existingIds.has(p.id))
+                            .slice(0, 8 - recentProducts.length);
+                        recentProducts = [...recentProducts, ...additionalProducts];
+                    }
+                    
+                    setFeaturedProducts(recentProducts.slice(0, 8));
+                } catch (recentError) {
+                    // Fallback: just show latest products if recently viewed fails
+                    const allProducts = await catalogService.getProducts();
+                    setFeaturedProducts(allProducts.slice(0, 8));
+                }
 
                 setLoading(false);
             } catch (err) {
@@ -54,36 +88,56 @@ function Homepage() {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-screen bg-white">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black"></div>
+                <LottieAnimation type="loading" width={100} height={100} />
             </div>
         );
     }
 
     return (
         <div className="bg-white">
-            <SectionHero data={heroData} />
+            <ScrollReveal direction="down" delay={0.1}>
+                <SectionHero data={heroData} />
+            </ScrollReveal>
 
-            <ProductCarousel
-                title="Explore All Categories"
-                items={categories}
-                type="category"
-            />
+            <ScrollReveal direction="up" delay={0.2}>
+                <div className="py-8">
+                    <ProductCarousel
+                        title="Explore All Categories"
+                        items={categories}
+                        type="category"
+                    />
+                </div>
+            </ScrollReveal>
 
-            <ProductCarousel
-                title="Your Recently Viewed Items"
-                items={featuredProducts}
-                type="product"
-            />
+            <ScrollReveal direction="up" delay={0.3}>
+                <div className="py-8">
+                    <ProductCarousel
+                        title="Your Recently Viewed Items"
+                        items={featuredProducts}
+                        type="product"
+                    />
+                </div>
+            </ScrollReveal>
 
-            <ProductCarousel
-                title="Our Most Popular Products"
-                items={popularProducts}
-                type="product"
-            />
+            <ScrollReveal direction="up" delay={0.4}>
+                <div className="py-8">
+                    <ProductCarousel
+                        title="Our Most Popular Products"
+                        items={popularProducts}
+                        type="product"
+                    />
+                </div>
+            </ScrollReveal>
 
-            <SectionHero data={heroDataSecondary} className="py-0" />
+            <ScrollReveal direction="up" delay={0.5}>
+                <SectionHero data={heroDataSecondary} className="py-0" />
+            </ScrollReveal>
 
-            <Discount />
+            <ScrollReveal direction="up" delay={0.6}>
+                <div className="py-8">
+                    <Discount />
+                </div>
+            </ScrollReveal>
         </div>
     )
 }

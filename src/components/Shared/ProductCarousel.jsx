@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 const ProductCarousel = ({ title, items, type = "product", className = "" }) => {
     const scrollRef = useRef(null);
@@ -13,10 +14,38 @@ const ProductCarousel = ({ title, items, type = "product", className = "" }) => 
         }
     };
 
+    const getLinkComponent = (item) => {
+        if (!item.href || item.href === '#') return null;
+        
+        // External links
+        if (item.href.startsWith('http')) {
+            return (
+                <a href={item.href} target="_blank" rel="noopener noreferrer" className="block h-full">
+                    <img
+                        src={item.image || item.img}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                </a>
+            );
+        }
+        
+        // Internal routes - use Link
+        return (
+            <Link to={item.href} className="block h-full">
+                <img
+                    src={item.image || item.img}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+            </Link>
+        );
+    };
+
     return (
         <div className={`relative w-full py-12 bg-gray-50/50 ${className}`}>
             <div className="max-w-7xl mx-auto px-6 mb-8 ml-0">
-                <h2 className="text-3xl font-bold text-gray-900 border-l-4 border-black pl-4">
+                <h2 className="text-2xl font-bold text-gray-900 border-l-4 border-black pl-4">
                     {title}
                 </h2>
             </div>
@@ -36,53 +65,59 @@ const ProductCarousel = ({ title, items, type = "product", className = "" }) => 
                     className="flex overflow-x-hidden scroll-smooth w-full px-6 gap-6"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                    {items.map((item, index) => (
-                        <div
-                            key={item.id || index}
-                            className={`flex-shrink-0 group cursor-pointer transition-all duration-300 hover:-translate-y-2 ${type === "category" ? "w-64" : "w-56"
-                                }`}
-                        >
-                            {/* Image Container */}
-                            <div className={`relative overflow-hidden mb-4 shadow-md group-hover:shadow-xl transition-shadow duration-300 ${type === "category" ? "rounded-full aspect-square border-4 border-white" : "rounded-xl aspect-square bg-gray-100"
-                                }`}>
-                                {item.href ? (
-                                    <a href={item.href} target="_blank" rel="noopener noreferrer" className="block h-full">
+                    {items.map((item, index) => {
+                        const linkComponent = getLinkComponent(item);
+                        
+                        return (
+                            <div
+                                key={item.id || index}
+                                className={`flex-shrink-0 group cursor-pointer transition-all duration-300 hover:-translate-y-2 ${type === "category" ? "w-64" : "w-56"
+                                    }`}
+                            >
+                                {/* Image Container */}
+                                <div className={`relative overflow-hidden mb-4 w-[200px] mx-auto shadow-md group-hover:shadow-xl transition-shadow duration-300 ${type === "category" ? "rounded-full aspect-square border-4 border-white" : "rounded-xl aspect-square bg-gray-100"
+                                    }`}>
+                                    {linkComponent || (
                                         <img
                                             src={item.image || item.img}
                                             alt={item.title}
                                             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                                         />
-                                    </a>
-                                ) : (
-                                    <img
-                                        src={item.image || item.img}
-                                        alt={item.title}
-                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                    />
-                                )}
+                                    )}
 
-                                {item.discount && (
-                                    <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">
-                                        {item.discount}
-                                    </div>
-                                )}
+                                    {item.discount && (
+                                        <div className="absolute top-3 left-3 bg-red-500 text-white text-[10px] uppercase font-bold px-2 py-1 rounded">
+                                            {item.discount}
+                                        </div>
+                                    )}
+                                </div>
+
+                                {/* Content */}
+                                <div className={type === "category" ? "text-center" : "text-left"}>
+                                    {item.href && item.href !== '#' && !item.href.startsWith('http') ? (
+                                        <Link to={item.href} className="block">
+                                            <h3 className={`font-semibold text-gray-900 line-clamp-2 hover:text-gray-600 transition-colors ${type === "category" ? "text-lg" : "text-sm h-10"}`}>
+                                                {item.title}
+                                            </h3>
+                                        </Link>
+                                    ) : (
+                                        <h3 className={`font-bold text-gray-900 line-clamp-2 ${type === "category" ? "text-lg" : "text-sm h-10"}`}>
+                                            {item.title}
+                                        </h3>
+                                    )}
+
+                                    {type === "product" && (
+                                        <div className="mt-2 flex items-baseline gap-2">
+                                            <span className="text-lg font-bold text-black">{item.price}</span>
+                                            {item.originalPrice && (
+                                                <span className="text-xs text-gray-400 line-through">{item.originalPrice}</span>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-
-                            {/* Content */}
-                            <div className={type === "category" ? "text-center" : "text-left"}>
-                                <h3 className={`font-bold text-gray-900 line-clamp-2 ${type === "category" ? "text-lg" : "text-sm h-10"}`}>
-                                    {item.title}
-                                </h3>
-
-                                {type === "product" && (
-                                    <div className="mt-2 flex items-baseline gap-2">
-                                        <span className="text-lg font-bold text-black">{item.price}</span>
-                                        <span className="text-xs text-gray-400 line-through">{item.originalPrice}</span>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
 
                 <button
