@@ -41,118 +41,146 @@ import MyAssets from './pages/Account/MyAssets';
 
 function App() {
 
-  return (
-    <>
-      <BrowserRouter>
-        <div className='app'>
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/Categories" element={<Categories />} />
-            <Route path="/view-all" element={<Categories />} />
-            <Route path="/product" element={<Product />} />
-            {/* Dynamic routes for categories/subcategories if we want them to be specific, 
+    return (
+        <>
+            <BrowserRouter>
+                <div className='app'>
+                    <Navbar />
+                    <Routes>
+                        <Route path="/" element={<Homepage />} />
+                        <Route path="/Categories" element={<Categories />} />
+                        <Route path="/view-all" element={<Categories />} />
+                        <Route path="/product" element={
+                            <ProtectedRoute>
+                                <Product />
+                            </ProtectedRoute>
+                        } />
+                        {/* Dynamic routes for categories/subcategories if we want them to be specific, 
                 but Categories page seems to handle query params? 
                 Actually, deeper linking might need new routes: 
                 <Route path="/categories/:categorySlug" element={<Categories />} />
                 But user just asked for view-all specifically. */}
-            <Route path="/categories/:category" element={<Categories />} />
-            <Route path="/categories/:category/:productSlug" element={<Product />} />
-            <Route path="/product/:slug" element={<Product />} />
-            <Route path="/product/:slug/templates" element={<TemplateSelection />} />
-            <Route path="/editor/:templateId" element={<Editor />} />
-            <Route path="/zakeke-editor/:productId" element={<ZakekeEditor />} />
-            <Route path="/cart" element={<Cart />} />
-            
-            {/* Authentication Routes */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password/:token" element={<ResetPassword />} />
-            
-            {/* Checkout Routes (Protected) */}
-            <Route path="/checkout/address" element={
-                <ProtectedRoute>
-                    <CheckoutAddress />
-                </ProtectedRoute>
-            } />
-            <Route path="/checkout/payment" element={
-                <ProtectedRoute>
-                    <CheckoutPayment />
-                </ProtectedRoute>
-            } />
-            <Route path="/checkout/review" element={
-                <ProtectedRoute>
-                    <CheckoutReview />
-                </ProtectedRoute>
-            } />
-            <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
-            <Route path="/checkout/failed" element={<CheckoutFailed />} />
-            
-            {/* Account Routes (Protected) */}
-            <Route path="/account" element={
-                <ProtectedRoute>
-                    <AccountDashboard />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/profile" element={
-                <ProtectedRoute>
-                    <Profile />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/addresses" element={
-                <ProtectedRoute>
-                    <Addresses />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/settings" element={
-                <ProtectedRoute>
-                    <Settings />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/designs" element={
-                <ProtectedRoute>
-                    <MyDesigns />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/assets" element={
-                <ProtectedRoute>
-                    <MyAssets />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/orders" element={
-                <ProtectedRoute>
-                    <Orders />
-                </ProtectedRoute>
-            } />
-            <Route path="/account/orders/:orderId" element={
-                <ProtectedRoute>
-                    <OrderDetail />
-                </ProtectedRoute>
-            } />
-            <Route path="/track-order/:trackingNumber" element={<OrderTracking />} />
-            
-            {/* Search Routes */}
-            <Route path="/search" element={<SearchResults />} />
-            
-            {/* Help & Support Routes */}
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/returns" element={<Returns />} />
-            <Route path="/shipping" element={<Shipping />} />
-            <Route path="/help" element={<FAQ />} />
-            
-            {/* Legal Routes */}
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="/cookie-policy" element={<Cookies />} />
-          </Routes>
-          <Footer />
-        </div>
-      </BrowserRouter>
-    </>
-  )
+                        <Route path="/categories/:category" element={<Categories />} />
+                        <Route path="/categories/:category/:productSlug" element={
+                            <ProtectedRoute>
+                                <Product />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/product/:slug" element={
+                            <ProtectedRoute>
+                                <Product />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/product/:slug/templates" element={
+                            <ProtectedRoute>
+                                <TemplateSelection />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/editor/:templateId" element={
+                            <ProtectedRoute>
+                                <Editor />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/zakeke-editor/:productId" element={
+                            <ProtectedRoute>
+                                <ZakekeEditor />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/cart" element={
+                            <ProtectedRoute>
+                                <Cart />
+                            </ProtectedRoute>
+                        } />
+
+                        {/* Authentication Routes */}
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+                        {/* Checkout Routes (Protected) */}
+                        <Route path="/checkout/address" element={
+                            <ProtectedRoute>
+                                <CheckoutAddress />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/checkout/payment" element={
+                            <ProtectedRoute>
+                                <CheckoutPayment />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/checkout/review" element={
+                            <ProtectedRoute>
+                                <CheckoutReview />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
+                        <Route path="/checkout/failed" element={<CheckoutFailed />} />
+
+                        {/* Account Routes (Protected) */}
+                        <Route path="/account" element={
+                            <ProtectedRoute>
+                                <AccountDashboard />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/profile" element={
+                            <ProtectedRoute>
+                                <Profile />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/addresses" element={
+                            <ProtectedRoute>
+                                <Addresses />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/settings" element={
+                            <ProtectedRoute>
+                                <Settings />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/designs" element={
+                            <ProtectedRoute>
+                                <MyDesigns />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/assets" element={
+                            <ProtectedRoute>
+                                <MyAssets />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/orders" element={
+                            <ProtectedRoute>
+                                <Orders />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/account/orders/:orderId" element={
+                            <ProtectedRoute>
+                                <OrderDetail />
+                            </ProtectedRoute>
+                        } />
+                        <Route path="/track-order/:trackingNumber" element={<OrderTracking />} />
+
+                        {/* Search Routes */}
+                        <Route path="/search" element={<SearchResults />} />
+
+                        {/* Help & Support Routes */}
+                        <Route path="/contact" element={<Contact />} />
+                        <Route path="/faq" element={<FAQ />} />
+                        <Route path="/returns" element={<Returns />} />
+                        <Route path="/shipping" element={<Shipping />} />
+                        <Route path="/help" element={<FAQ />} />
+
+                        {/* Legal Routes */}
+                        <Route path="/terms" element={<Terms />} />
+                        <Route path="/privacy" element={<Privacy />} />
+                        <Route path="/cookies" element={<Cookies />} />
+                        <Route path="/cookie-policy" element={<Cookies />} />
+                    </Routes>
+                    <Footer />
+                </div>
+            </BrowserRouter>
+        </>
+    )
 }
 
 export default App

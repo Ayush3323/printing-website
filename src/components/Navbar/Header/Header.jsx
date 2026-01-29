@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
 import SearchDropdown from "./SearchDropdown";
 import SignInDropdown from "./SignInDropdown";
+import AccountDropdown from "./AccountDropdown";
 import NavBar from "./NavBar";
 import userService from "../../../services/userService";
 import { BsFolder2 } from "react-icons/bs";
@@ -15,13 +16,24 @@ export default function Header() {
 
   const [showSearch, setShowSearch] = useState(false);
   const [showSignIn, setShowSignIn] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
 
   const searchRef = useRef(null);
 
   // Check authentication status
+  const checkAuth = () => {
+    const isAuth = userService.isAuthenticated();
+    setIsAuthenticated(isAuth);
+    if (isAuth) {
+      const storedUser = localStorage.getItem('username');
+      setUsername(storedUser || 'Account');
+    }
+  };
+
   useEffect(() => {
-    setIsAuthenticated(userService.isAuthenticated());
+    checkAuth();
   }, [location.pathname]); // Re-check on route change
 
   // Close dropdowns on route change
@@ -29,6 +41,7 @@ export default function Header() {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setShowSearch(false);
     setShowSignIn(false);
+    setShowAccount(false);
   }, [location.pathname]);
 
   // Close search on outside click
@@ -41,6 +54,14 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleLogout = () => {
+    userService.logout();
+    setIsAuthenticated(false);
+    setShowAccount(false);
+    setUsername("");
+    window.location.href = '/login';
+  };
 
   return (
     <header className="max-w-450 mx-auto max-h-48 h-full block items-center px-4 bg-white">
@@ -57,7 +78,7 @@ export default function Header() {
         {/* Search */}
         <div className="hidden md:flex flex-1 mx-8">
           <div ref={searchRef} className="relative w-full">
-            <form 
+            <form
               onSubmit={(e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
@@ -75,7 +96,7 @@ export default function Header() {
                 onFocus={() => setShowSearch(true)}
                 className="w-full border rounded-lg py-2 pl-4 pr-10 focus:outline-none"
               />
-              <button 
+              <button
                 type="submit"
                 className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
               >
@@ -116,12 +137,19 @@ export default function Header() {
 
           {/* Sign In / Account */}
           {isAuthenticated ? (
-            <Link to="/account">
-              <div className="pb-1 border-b-2 border-transparent hover:border-gray-400 flex items-center gap-1">
-                <LuUserRound className="text-lg" />
-                <span>Account</span>
-              </div>
-            </Link>
+            <div
+              className="relative"
+              onMouseEnter={() => setShowAccount(true)}
+              onMouseLeave={() => setShowAccount(false)}
+            >
+              <Link to="/account">
+                <div className="pb-1 border-b-2 border-transparent hover:border-gray-400 flex items-center gap-1">
+                  <LuUserRound className="text-lg" />
+                  <span>Hi, {username}</span>
+                </div>
+              </Link>
+              {showAccount && <AccountDropdown onLogout={handleLogout} />}
+            </div>
           ) : (
             <div
               onMouseEnter={() => setShowSignIn(true)}

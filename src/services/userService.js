@@ -17,9 +17,8 @@ const userService = {
         try {
             // Using Basic Auth - Django REST Framework accepts Basic Auth for login
             const credentials = btoa(`${username}:${password}`);
-            // const response = await axios.get(`http://127.0.0.1:8000/api/v1/users/me/`, 
-            const response = await axios.get(import.meta.env.VITE_API_URL + '/users/me/', 
-            {
+
+            const response = await apiHook.get('/users/me/', {
                 headers: {
                     'Authorization': `Basic ${credentials}`,
                     'Content-Type': 'application/json',
