@@ -50,60 +50,64 @@ function App() {
         <BrowserRouter>
             <Routes>
                 {/* Authentication Routes - No Header/Footer */}
-                <Route path="/login" element={<AuthLayout><Login /></AuthLayout>} />
-                <Route path="/register" element={<AuthLayout><Register /></AuthLayout>} />
-                <Route path="/forgot-password" element={<AuthLayout><ForgotPassword /></AuthLayout>} />
-                <Route path="/reset-password/:token" element={<AuthLayout><ResetPassword /></AuthLayout>} />
+                <Route element={<AuthLayout />}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
+                </Route>
 
                 {/* Main Routes - With Header/Footer */}
-                <Route path="/" element={<MainLayout><Homepage /></MainLayout>} />
-                <Route path="/categories" element={<MainLayout><Categories /></MainLayout>} />
-                <Route path="/view-all" element={<MainLayout><Categories /></MainLayout>} />
-                <Route path="/categories/:category" element={<MainLayout><Categories /></MainLayout>} />
-                <Route path="/categories/:category/:productSlug" element={<MainLayout><ProtectedRoute><Product /></ProtectedRoute></MainLayout>} />
-                <Route path="/product" element={<MainLayout><ProtectedRoute><Product /></ProtectedRoute></MainLayout>} />
-                <Route path="/product/:slug" element={<MainLayout><ProtectedRoute><Product /></ProtectedRoute></MainLayout>} />
-                <Route path="/product/:slug/templates" element={<MainLayout><ProtectedRoute><TemplateSelection /></ProtectedRoute></MainLayout>} />
-                <Route path="/editor/:templateId" element={<MainLayout><ProtectedRoute><Editor /></ProtectedRoute></MainLayout>} />
-                <Route path="/zakeke-editor/:productId" element={<MainLayout><ProtectedRoute><ZakekeEditor /></ProtectedRoute></MainLayout>} />
-                <Route path="/cart" element={<MainLayout><ProtectedRoute><Cart /></ProtectedRoute></MainLayout>} />
+                <Route element={<MainLayout />}>
+                    <Route path="/" element={<Homepage />} />
+                    <Route path="/categories" element={<Categories />} />
+                    <Route path="/view-all" element={<Categories />} />
+                    <Route path="/categories/:category" element={<Categories />} />
+                    <Route path="/categories/:category/:productSlug" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+                    <Route path="/product" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+                    <Route path="/product/:slug" element={<ProtectedRoute><Product /></ProtectedRoute>} />
+                    <Route path="/product/:slug/templates" element={<ProtectedRoute><TemplateSelection /></ProtectedRoute>} />
+                    <Route path="/editor/:templateId" element={<ProtectedRoute><Editor /></ProtectedRoute>} />
+                    <Route path="/zakeke-editor/:productId" element={<ProtectedRoute><ZakekeEditor /></ProtectedRoute>} />
+                    <Route path="/cart" element={<ProtectedRoute><Cart /></ProtectedRoute>} />
 
-                {/* Checkout Routes - With Header/Footer */}
-                <Route path="/checkout/address" element={<MainLayout><ProtectedRoute><CheckoutAddress /></ProtectedRoute></MainLayout>} />
-                <Route path="/checkout/payment" element={<MainLayout><ProtectedRoute><CheckoutPayment /></ProtectedRoute></MainLayout>} />
-                <Route path="/checkout/review" element={<MainLayout><ProtectedRoute><CheckoutReview /></ProtectedRoute></MainLayout>} />
-                <Route path="/checkout/success/:orderId" element={<MainLayout><CheckoutSuccess /></MainLayout>} />
-                <Route path="/checkout/failed" element={<MainLayout><CheckoutFailed /></MainLayout>} />
+                    {/* Checkout Routes */}
+                    <Route path="/checkout/address" element={<ProtectedRoute><CheckoutAddress /></ProtectedRoute>} />
+                    <Route path="/checkout/payment" element={<ProtectedRoute><CheckoutPayment /></ProtectedRoute>} />
+                    <Route path="/checkout/review" element={<ProtectedRoute><CheckoutReview /></ProtectedRoute>} />
+                    <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
+                    <Route path="/checkout/failed" element={<CheckoutFailed />} />
 
-                {/* Account Routes - With Header/Footer */}
-                <Route path="/account" element={<MainLayout><ProtectedRoute><AccountDashboard /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/profile" element={<MainLayout><ProtectedRoute><Profile /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/addresses" element={<MainLayout><ProtectedRoute><Addresses /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/settings" element={<MainLayout><ProtectedRoute><Settings /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/designs" element={<MainLayout><ProtectedRoute><MyDesigns /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/assets" element={<MainLayout><ProtectedRoute><MyAssets /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/orders" element={<MainLayout><ProtectedRoute><Orders /></ProtectedRoute></MainLayout>} />
-                <Route path="/account/orders/:orderId" element={<MainLayout><ProtectedRoute><OrderDetail /></ProtectedRoute></MainLayout>} />
-                <Route path="/track-order/:trackingNumber" element={<MainLayout><OrderTracking /></MainLayout>} />
+                    {/* Account Routes */}
+                    <Route path="/account" element={<ProtectedRoute><AccountDashboard /></ProtectedRoute>} />
+                    <Route path="/account/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                    <Route path="/account/addresses" element={<ProtectedRoute><Addresses /></ProtectedRoute>} />
+                    <Route path="/account/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+                    <Route path="/account/designs" element={<ProtectedRoute><MyDesigns /></ProtectedRoute>} />
+                    <Route path="/account/assets" element={<ProtectedRoute><MyAssets /></ProtectedRoute>} />
+                    <Route path="/account/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+                    <Route path="/account/orders/:orderId" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+                    <Route path="/track-order/:trackingNumber" element={<OrderTracking />} />
 
-                {/* Search Routes - With Header/Footer */}
-                <Route path="/search" element={<MainLayout><SearchResults /></MainLayout>} />
+                    {/* Search Routes */}
+                    <Route path="/search" element={<SearchResults />} />
 
-                {/* Help & Support Routes - With Header/Footer */}
-                <Route path="/contact" element={<MainLayout><Contact /></MainLayout>} />
-                <Route path="/faq" element={<MainLayout><FAQ /></MainLayout>} />
-                <Route path="/returns" element={<MainLayout><Returns /></MainLayout>} />
-                <Route path="/shipping" element={<MainLayout><Shipping /></MainLayout>} />
-                <Route path="/help" element={<MainLayout><FAQ /></MainLayout>} />
+                    {/* Help & Support Routes */}
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/returns" element={<Returns />} />
+                    <Route path="/shipping" element={<Shipping />} />
+                    <Route path="/help" element={<FAQ />} />
 
-                {/* Legal Routes - With Header/Footer */}
-                <Route path="/terms" element={<MainLayout><Terms /></MainLayout>} />
-                <Route path="/privacy" element={<MainLayout><Privacy /></MainLayout>} />
-                <Route path="/cookies" element={<MainLayout><Cookies /></MainLayout>} />
-                <Route path="/cookie-policy" element={<MainLayout><Cookies /></MainLayout>} />
+                    {/* Legal Routes */}
+                    <Route path="/terms" element={<Terms />} />
+                    <Route path="/privacy" element={<Privacy />} />
+                    <Route path="/cookies" element={<Cookies />} />
+                    <Route path="/cookie-policy" element={<Cookies />} />
 
-                {/* 404 - Catch all unknown routes */}
-                <Route path="*" element={<MainLayout><NotFound /></MainLayout>} />
+                    {/* 404 - Catch all unknown routes */}
+                    <Route path="*" element={<NotFound />} />
+                </Route>
             </Routes>
         </BrowserRouter>
     );

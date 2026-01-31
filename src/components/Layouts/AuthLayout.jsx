@@ -1,11 +1,12 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 import './Layouts.css';
 
-const AuthLayout = ({ children }) => {
+const AuthLayout = () => {
     return (
         <div className='app auth-layout'>
             <main className="auth-content">
-                {children}
+                <Outlet />
             </main>
         </div>
     );
