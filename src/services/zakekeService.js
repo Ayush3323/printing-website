@@ -7,9 +7,19 @@ const zakekeService = {
     getToken: async () => {
         try {
             const response = await apiHook.get('/zakeke/token/');
-            return response.data.access_token;
+            const token = response.data.access_token;
+            if (!token) {
+                console.error('Token response:', response.data);
+                throw new Error('Token not found in response');
+            }
+            console.log('Zakeke token fetched successfully');
+            return token;
         } catch (error) {
             console.error('Error fetching Zakeke token:', error);
+            if (error.response) {
+                console.error('Response data:', error.response.data);
+                console.error('Response status:', error.response.status);
+            }
             throw error;
         }
     },
